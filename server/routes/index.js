@@ -7,7 +7,7 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/api", (req, res) => {
-  res.json({ message: "Hello World!" });
+  res.json({ message: "Hello World and Japan!" });
 });
 
 router.get('*', (req, res) => {
