@@ -2,16 +2,16 @@ import "./App.css";
 import { useState, useEffect } from "react";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [datas, setDatas] = useState("");
   useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
-      .then((data) => setMessage(data.message));
+      .then((data) => setDatas(data.datas));
   }, []);
   return (
     <div className="App">
       <h1>フロントエンド</h1>
-      <p>{message}</p>
+      <p>{datas}</p>
     </div>
   );
 }
