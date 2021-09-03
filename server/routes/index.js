@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
-const pg = require("pg");
+const { Client } = require("pg");
+require("dotenv").config();
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -8,25 +9,22 @@ router.get("/", function (req, res, next) {
 });
 
 router.get("/api", (req, res) => {
-  const pool = new pg.Pool({
-    database: "blogapp",
-    user: "kawabata",
-    password: "XLwdAX2m",
-    host: "localhost",
+  const pool = new Client({
+    database: process.env.ENV_DB,
+    user: process.env.ENV_USER,
+    password: process.env.ENV_PASSWORD,
+    host: process.env.ENV_HOST,
     port: "5432",
   });
   pool.connect((err, client) => {
     if (err) {
       console.log(err);
     } else {
-      client.query("SELECT name FROM staff", (err, result) => {
-        res.send({
-          datas: result.rows[0].name,
-        });
-        // res.json({ message: "Hello World!" });
-        console.log(result.rows[0].name);
+      client.query("SELECT name, hands FROM rank", (err, result) => {
+        console.log(result.rows);
       });
     }
+    res.send({ sample: "OK!!" });
   });
 });
 

@@ -6,7 +6,7 @@ function App() {
   useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
-      .then((data) => setDatas(data.datas));
+      .then((data) => setDatas(data.sample));
   }, []);
   return (
     <div className="App">
