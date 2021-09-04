@@ -2,22 +2,39 @@ var express = require("express");
 var router = express.Router();
 const pool = require("../db/pool.js");
 
-
 /* GET home page. */
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
 router.get("/api", (req, res) => {
-  pool.query("SELECT * FROM memo", function (error, results) {
-    if (error) {
-      throw error;
-    }
-    res.json({
-      data: results.rows,
+  pool
+    .query("SELECT * FROM memo")
+    .then((results) => {
+      res.json({
+        rows: results.rows,
+      });
+    })
+    .catch((err) => {
+      throw err;
     });
-    console.log(process.env.ENV_HOST);
-  });
+});
+
+router.post("/regist", (req, res) => {
+  const title = req.body.title;
+  const text = req.body.text;
+  pool
+    .query("INSERT into memo(title, text) VALUES($1, $2)", [title, text])
+    .then(() => {
+      pool.query("SELECT * FROM memo").then((results) => {
+        res.json({
+          rows: results.rows,
+        });
+      });
+    })
+    .catch((err) => {
+      throw err;
+    });
 });
 
 router.get("*", (req, res) => {
