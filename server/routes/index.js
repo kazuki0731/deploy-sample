@@ -7,6 +7,13 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
+router.post("/login", (req, res) => {
+  const loginName = req.body.loginName;
+  if (loginName === "kawabata") {
+    res.json("OK");
+  }
+});
+
 router.get("/api", (req, res) => {
   pool
     .query("SELECT * FROM memo")
