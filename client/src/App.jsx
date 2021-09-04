@@ -7,12 +7,13 @@ function App() {
     fetch("/api")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        setData(data.data[0].title);
       });
   }, []);
   return (
     <div className="App">
       <h1>フロントエンド</h1>
+      <p>{data}</p>
     </div>
   );
 }

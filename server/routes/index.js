@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const pool = require("../db/pool.js");
+require("pg").defaults.ssl = true;
 
 // require("dotenv").config();
 
@@ -14,15 +15,14 @@ router.get("/api", (req, res) => {
     if (error) {
       throw error;
     }
-    console.log("OK");
-    res.status(200).json({
+    res.json({
       data: results.rows,
     });
   });
 });
 
-// router.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../client/build/index.html"));
-// });
+router.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 module.exports = router;
