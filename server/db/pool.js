@@ -1,11 +1,12 @@
 const { Pool } = require("pg");
-require("pg").defaults.ssl = true;
+require('dotenv').config();
+
 
 const pool = new Pool({
-  database: "d93viok0bqkd5e",
-  user: "zjldotdtjrzzxo",
-  password: "6e655c3dce4d84797d23ab53e4d1e628954bb2d9b798386f387f749c1218af93",
-  host: "ec2-18-235-45-217.compute-1.amazonaws.com",
+  database: process.env.ENV_DB,
+  user: process.env.ENV_USER,
+  password: process.env.ENV_PASSWORD,
+  host: process.env.ENV_HOST,
   port: 5432,
   ssl: {
     sslmode: "require",
