@@ -1,6 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -22,6 +23,7 @@ const Login = () => {
         <br />
         <input type="submit" value="ログイン" />
       </form>
+      <Link to="/main">移動</Link>
     </div>
   );
 };
