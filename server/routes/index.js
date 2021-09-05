@@ -15,6 +15,7 @@ router.post("/login", (req, res) => {
 });
 
 router.get("/api", (req, res) => {
+  console.log("git");
   pool
     .query("SELECT * FROM todos")
     .then((results) => {
