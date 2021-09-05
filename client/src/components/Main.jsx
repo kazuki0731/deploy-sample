@@ -21,7 +21,7 @@ function Main() {
 
   return (
     <div>
-      <h1>フロントエンド</h1>
+      <h1>Todoリスト</h1>
       <form onSubmit={handleSubmit(submitUser)}>
         <label htmlFor="todo">テキスト: </label>
         <input type="text" id="todo" {...register("todo")} />

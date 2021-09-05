@@ -17,7 +17,7 @@ const Login = () => {
 
   return (
     <div>
-      <h1>ログイン画面</h1>
+      <h1>ログインページ</h1>
       <form onSubmit={handleSubmit(login)}>
         <label htmlFor="name">Name:</label>
         <input type="text" id="name" {...register("loginName")} />
