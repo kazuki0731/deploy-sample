@@ -19,7 +19,7 @@ const Login = () => {
     <div>
       <h1>ログイン画面</h1>
       <form onSubmit={handleSubmit(login)}>
-        <label htmlFor="name">名前を入力</label>
+        <label htmlFor="name">Name:</label>
         <input type="text" id="name" {...register("loginName")} />
         <br />
         <input type="submit" value="ログイン" />
