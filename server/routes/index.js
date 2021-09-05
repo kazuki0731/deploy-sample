@@ -16,8 +16,9 @@ router.post("/login", (req, res) => {
 
 router.get("/api", (req, res) => {
   pool
-    .query("SELECT * FROM memo")
+    .query("SELECT * FROM todos")
     .then((results) => {
+      console.log(results.rows);
       res.json({
         rows: results.rows,
       });
@@ -28,12 +29,12 @@ router.get("/api", (req, res) => {
 });
 
 router.post("/regist", (req, res) => {
-  const title = req.body.title;
-  const text = req.body.text;
+  const todo = req.body.todo;
+  console.log(todo);
   pool
-    .query("INSERT into memo(title, text) VALUES($1, $2)", [title, text])
+    .query("INSERT into todos(todo) VALUES($1)", [todo])
     .then(() => {
-      pool.query("SELECT * FROM memo").then((results) => {
+      pool.query("SELECT * FROM todos").then((results) => {
         res.json({
           rows: results.rows,
         });

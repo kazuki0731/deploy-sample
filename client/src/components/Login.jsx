@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const [isLogin, setIsLogin] = useState(false);
   const { register, handleSubmit, reset } = useForm();
 
   const login = (data) => {
     axios.post("/login", data).then((res) => {
       if (res.data) {
-        window.location.href = "/main";
+        setIsLogin(true);
       }
     });
   };
@@ -18,12 +19,17 @@ const Login = () => {
     <div>
       <h1>ログイン画面</h1>
       <form onSubmit={handleSubmit(login)}>
-        <label htmlFor="name"></label>
+        <label htmlFor="name">名前を入力</label>
         <input type="text" id="name" {...register("loginName")} />
         <br />
         <input type="submit" value="ログイン" />
       </form>
-      <Link to="/main">移動</Link>
+      {isLogin && (
+        <div>
+          <p>ログインできました</p>
+          <Link to="/main">メインページへ</Link>
+        </div>
+      )}
     </div>
   );
 };

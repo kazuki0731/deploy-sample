@@ -14,6 +14,7 @@ function Main() {
 
   const submitUser = (data) => {
     axios.post("/regist", data).then((res) => {
+      console.log(res.data);
       setDatas(res.data.rows);
     });
     reset();
@@ -23,16 +24,14 @@ function Main() {
     <div>
       <h1>フロントエンド</h1>
       <form onSubmit={handleSubmit(submitUser)}>
-        <label htmlFor="title">名前:</label>
-        <input type="text" id="title" {...register("title")} />
-        <label htmlFor="text">テキスト:</label>
-        <input type="text" id="text" {...register("text")} />
+        <label htmlFor="todo">テキスト: </label>
+        <input type="text" id="todo" {...register("todo")} />
         <input type="submit" value="送信" />
       </form>
       <ul>
         {datas.map((data, index) => (
           <li key={index} style={{ listStyle: "none" }}>
-            <span>{data.title}</span>：<span>{data.text}</span>
+            {data.todo}
           </li>
         ))}
       </ul>
