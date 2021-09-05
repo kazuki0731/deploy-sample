@@ -1,1 +1,0 @@
-# heroku-deploy-sample2
