@@ -14,7 +14,6 @@ function Main() {
 
   const submitUser = (data) => {
     axios.post("/regist", data).then((res) => {
-      console.log(res.data);
       setDatas(res.data.rows);
     });
     reset();

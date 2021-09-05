@@ -18,7 +18,6 @@ router.get("/api", (req, res) => {
   pool
     .query("SELECT * FROM todos")
     .then((results) => {
-      console.log(results.rows);
       res.json({
         rows: results.rows,
       });
@@ -30,7 +29,6 @@ router.get("/api", (req, res) => {
 
 router.post("/regist", (req, res) => {
   const todo = req.body.todo;
-  console.log(todo);
   pool
     .query("INSERT into todos(todo) VALUES($1)", [todo])
     .then(() => {
