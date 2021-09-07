@@ -7,40 +7,44 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
+// login
 router.post("/login", (req, res) => {
   const loginName = req.body.loginName;
   if (loginName === "kawabata") {
+    req.session.user = loginName;
     res.json("OK");
   }
 });
 
-router.get("/api", (req, res) => {
-  pool
+// getUsers
+router.get("/api", async (req, res) => {
+  const results = await pool
     .query("SELECT * FROM todos")
-    .then((results) => {
-      res.json({
-        rows: results.rows,
-      });
-    })
-    .catch((err) => {
-      throw err;
-    });
+    .catch((e) => console.log(e));
+  await res.json({ rows: results.rows, user: req.session.user });
 });
 
-router.post("/regist", (req, res) => {
+// registUsers
+router.post("/registUser", async (req, res) => {
   const todo = req.body.todo;
-  pool
-    .query("INSERT into todos(todo) VALUES($1)", [todo])
-    .then(() => {
-      pool.query("SELECT * FROM todos").then((results) => {
-        res.json({
-          rows: results.rows,
-        });
-      });
-    })
-    .catch((err) => {
-      throw err;
-    });
+  await pool
+    .query("INSERT INTO todos(todo) VALUES($1)", [todo])
+    .catch((e) => console.log(e));
+  const results = await pool
+    .query("SELECT * FROM todos")
+    .catch((e) => console.log(e));
+  await res.json({ rows: results.rows });
+});
+
+// deleteUsers
+router.post("/deleteUser", async (req, res) => {
+  const id = req.body.id;
+  const todo = req.body.todo;
+
+  await pool
+    .query("DELETE FROM todos where id = $1  AND todo = $2", [id, todo])
+    .catch((e) => console.log(e));
+  res.send("OK");
 });
 
 router.get("*", (req, res) => {
