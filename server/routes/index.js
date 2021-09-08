@@ -7,7 +7,7 @@ router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-// login
+
 router.post("/login", (req, res) => {
   const loginName = req.body.loginName;
   if (loginName === "kawabata") {
@@ -16,7 +16,7 @@ router.post("/login", (req, res) => {
   }
 });
 
-// getUsers
+
 router.get("/api", async (req, res) => {
   const results = await pool
     .query("SELECT * FROM todos")
@@ -24,7 +24,7 @@ router.get("/api", async (req, res) => {
   await res.json({ rows: results.rows, user: req.session.user });
 });
 
-// registUsers
+
 router.post("/registUser", async (req, res) => {
   const todo = req.body.todo;
   await pool
@@ -36,7 +36,7 @@ router.post("/registUser", async (req, res) => {
   await res.json({ rows: results.rows });
 });
 
-// deleteUsers
+
 router.post("/deleteUser", async (req, res) => {
   const id = req.body.id;
   const todo = req.body.todo;
