@@ -4,9 +4,8 @@ const pool = require("../db/pool.js");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.send();
+  res.render("index", { title: "Express" });
 });
-
 
 router.post("/login", (req, res) => {
   const loginName = req.body.loginName;
@@ -16,14 +15,12 @@ router.post("/login", (req, res) => {
   }
 });
 
-
 router.get("/api", async (req, res) => {
   const results = await pool
     .query("SELECT * FROM todos")
     .catch((e) => console.log(e));
   await res.json({ rows: results.rows, user: req.session.user });
 });
-
 
 router.post("/registUser", async (req, res) => {
   const todo = req.body.todo;
@@ -35,7 +32,6 @@ router.post("/registUser", async (req, res) => {
     .catch((e) => console.log(e));
   await res.json({ rows: results.rows });
 });
-
 
 router.post("/deleteUser", async (req, res) => {
   const id = req.body.id;
