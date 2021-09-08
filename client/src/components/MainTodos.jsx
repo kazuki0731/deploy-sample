@@ -1,14 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 
 const MainTodos = (props) => {
   const { classes, datas, completeTodo, deleteTodo, moveTodos } = props;
 
-  
-  
-
   return (
     <div className={classes.TodosContainer}>
-      <p style={{ fontWeight: "bold" }}>☆未完了☆</p>
+      <p>☆未完了☆</p>
       <ul>
         {datas.map((data, index) => (
           <li key={index}>

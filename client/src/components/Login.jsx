@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,6 +6,8 @@ import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { createContext } from "react";
+import { formContext } from "../context/ContextForm";
+import { useContext } from "react";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -27,8 +28,9 @@ export const FormContext = createContext();
 const Login = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [open, setOpen] = useState(false);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useContext(formContext);
   const classes = useStyles();
+  
 
   const handleOpen = () => {
     setOpen(true);
@@ -38,6 +40,7 @@ const Login = () => {
     setOpen(false);
   };
 
+
   const login = (data) => {
     axios.post("/login", data).then((res) => {
       if (res.data) {
@@ -46,9 +49,10 @@ const Login = () => {
     });
   };
 
+
+
   return (
     <div>
-      <FormContext.Provider>
         <h1>トップページ</h1>
         <button type="button" onClick={handleOpen}>
           始める
@@ -80,7 +84,6 @@ const Login = () => {
             </div>
           </Fade>
         </Modal>
-      </FormContext.Provider>
     </div>
   );
 };

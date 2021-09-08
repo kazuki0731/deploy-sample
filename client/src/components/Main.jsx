@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useForm } from "react-hook-form";
 import { makeStyles } from "@material-ui/core/styles";
 import Mainform from "./Mainform";
 import MainTodos from "./MainTodos";
 import MainIncompleteTodos from "./MainIncompleteTodos";
+import { useContext } from "react";
+import { formContext } from "../context/ContextForm";
 
 const useStyles = makeStyles({
   TodosContainer: {
@@ -14,12 +15,18 @@ const useStyles = makeStyles({
     "& li": {
       listStyle: "none",
     },
+    "& p": {
+      fontWeight: "bold",
+    },
   },
   completeContainer: {
     height: "250px",
     backgroundColor: "lightgreen",
     "& li": {
       listStyle: "none",
+    },
+    "& p": {
+      fontWeight: "bold",
     },
   },
   TodosMoveBtn: {
@@ -33,8 +40,8 @@ function Main() {
   const [user, setUser] = useState("");
   const [datas, setDatas] = useState([]);
   const [completeDatas, setCompleteDatas] = useState([]);
-  const { register, handleSubmit, reset } = useForm();
   const classes = useStyles();
+  const { reset } = useContext(formContext);
 
   const getTodosAndUsers = async () => {
     const res = await axios.get("/api");
@@ -98,11 +105,7 @@ function Main() {
         </p>
       </div>
 
-      <Mainform
-        register={register}
-        handleSubmit={handleSubmit}
-        submitTodo={submitTodo}
-      />
+      <Mainform submitTodo={submitTodo} />
 
       <MainTodos
         datas={datas}

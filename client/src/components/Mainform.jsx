@@ -2,6 +2,8 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonSource from "./ButtonSource";
 import TextSource from "./TextSource";
+import { useContext } from "react";
+import { formContext } from "../context/ContextForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,13 +23,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Mainform = (props) => {
-  const { handleSubmit, submitTodo, register } = props;
+  const { submitTodo } = props;
   const classes = useStyles();
+  const { handleSubmit } = useContext(formContext);
 
   return (
     <div>
       <form className={classes.root} onSubmit={handleSubmit(submitTodo)}>
-        <TextSource label={"Todoを入力"} register={register} />
+        <TextSource label={"Todoを入力"} registText={"todo"} />
         <ButtonSource classes={classes.btn} color={"default"} />
       </form>
     </div>
