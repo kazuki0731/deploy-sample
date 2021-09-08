@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
-import { createContext } from "react";
 import { formContext } from "../context/ContextForm";
 import { useContext } from "react";
 
@@ -23,14 +22,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const FormContext = createContext();
-
 const Login = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [open, setOpen] = useState(false);
   const { register, handleSubmit } = useContext(formContext);
   const classes = useStyles();
-  
 
   const handleOpen = () => {
     setOpen(true);
@@ -40,7 +36,6 @@ const Login = () => {
     setOpen(false);
   };
 
-
   const login = (data) => {
     axios.post("/login", data).then((res) => {
       if (res.data) {
@@ -49,42 +44,39 @@ const Login = () => {
     });
   };
 
-
-
   return (
     <div>
-        <h1>トップページ</h1>
-        <button type="button" onClick={handleOpen}>
-          始める
-        </button>
-        <Modal
-          className={classes.modal}
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <Fade in={open}>
-            <div className={classes.paper}>
-              <form onSubmit={handleSubmit(login)}>
-                <label htmlFor="name">Name:</label>
-                <input type="text" id="name" {...register("loginName")} />
-                <br />
-                <input type="submit" value="ログイン" />
-              </form>
-              {isLogin && (
-                <div>
-                  <p>ログインできました</p>
-                  <Link to="/main">メインページへ</Link>
-                </div>
-              )}
-            </div>
-          </Fade>
-        </Modal>
-        <button>テスト</button>
+      <h1>トップページ</h1>
+      <button type="button" onClick={handleOpen}>
+        始める
+      </button>
+      <Modal
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <form onSubmit={handleSubmit(login)}>
+              <label htmlFor="name">Name:</label>
+              <input type="text" id="name" {...register("loginName")} />
+              <br />
+              <input type="submit" value="ログイン" />
+            </form>
+            {isLogin && (
+              <div>
+                <p>ログインできました</p>
+                <Link to="/main">メインページへ</Link>
+              </div>
+            )}
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 };

@@ -4,14 +4,14 @@ const pool = require("../db/pool.js");
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+  res.send("OK");
 });
 
 router.post("/login", (req, res) => {
   const loginName = req.body.loginName;
   if (loginName === "kawabata") {
     req.session.user = loginName;
-    res.json("OK");
+    res.json("OK!");
   }
 });
 
@@ -22,7 +22,7 @@ router.get("/api", async (req, res) => {
   await res.json({ rows: results.rows, user: req.session.user });
 });
 
-router.post("/registUser", async (req, res) => {
+router.put("/user", async (req, res) => {
   const todo = req.body.todo;
   await pool
     .query("INSERT INTO todos(todo) VALUES($1)", [todo])
@@ -33,10 +33,9 @@ router.post("/registUser", async (req, res) => {
   await res.json({ rows: results.rows });
 });
 
-router.post("/deleteUser", async (req, res) => {
+router.delete("/user", async (req, res) => {
   const id = req.body.id;
   const todo = req.body.todo;
-
   await pool
     .query("DELETE FROM todos where id = $1  AND todo = $2", [id, todo])
     .catch((e) => console.log(e));

@@ -1,13 +1,13 @@
 import React from "react";
 
 const MainTodos = (props) => {
-  const { classes, datas, completeTodo, deleteTodo, moveTodos } = props;
+  const { classes, todos, completeTodo, deleteTodo, moveTodos } = props;
 
   return (
-    <div className={classes.TodosContainer}>
+    <div className={classes.todosContainer}>
       <p>☆未完了☆</p>
       <ul>
-        {datas.map((data, index) => (
+        {todos.map((data, index) => (
           <li key={index}>
             <span
               style={{ textDecoration: data.iscompleted && "line-through" }}
@@ -19,7 +19,7 @@ const MainTodos = (props) => {
           </li>
         ))}
       </ul>
-      <button className={classes.TodosMoveBtn} onClick={moveTodos}>
+      <button className={classes.todosMoveBtn} onClick={moveTodos}>
         下へ
       </button>
     </div>
