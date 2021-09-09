@@ -3,7 +3,7 @@ import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
 import Mainform from "./Mainform";
 import MainTodos from "./MainTodos";
-import MainIncompleteTodos from "./MainIncompleteTodos";
+import MainCompleteTodos from "./MainCompleteTodos";
 import { useContext } from "react";
 import { formContext } from "../context/ContextForm";
 
@@ -19,17 +19,23 @@ const useStyles = makeStyles({
       fontWeight: "bold",
     },
   },
+
   completeContainer: {
     height: "250px",
     backgroundColor: "lightgreen",
+    position: "relative",
     "& li": {
       listStyle: "none",
     },
-
     "& p": {
       fontWeight: "bold",
     },
   },
+
+  active: {
+    textDecoration: "line-through",
+  },
+
   todosMoveBtn: {
     position: "absolute",
     bottom: "10%",
@@ -44,18 +50,20 @@ function Main() {
   const classes = useStyles();
   const { reset } = useContext(formContext);
 
-  const getTodosAndUsers = async () => {
-    const res = await axios.get("/api");
-    setTodos(res.data.rows);
-    setUser(res.data.user);
+  const getTodos = async () => {
+    const todos = await axios.get("/allTodos");
+    const completeTodos = await axios.get("/allCompleteTodos");
+    setTodos(todos.data.rows);
+    setCompleteTodos(completeTodos.data.rows);
+    setUser(todos.data.user);
   };
 
   useEffect(() => {
-    getTodosAndUsers();
+    getTodos();
   }, []);
 
   const submitTodo = (data) => {
-    axios.put("/user", data).then((res) => {
+    axios.put("/todo", data).then((res) => {
       setTodos(res.data.rows);
     });
     reset();
@@ -73,28 +81,43 @@ function Main() {
 
   const deleteTodo = (todoIndex) => {
     const deleteId = todos[todoIndex].id;
-    const deleteTodo = todos[todoIndex].todo;
-    axios
-      .delete("/user", { data: { id: deleteId, todo: deleteTodo } })
-      .then((res) => {
-        if (res.data === "OK") {
-          todos.splice(todoIndex, 1);
-          setTodos([...todos]);
-        }
-      });
+    axios.delete("/todo", { data: { id: deleteId } }).then((res) => {
+      todos.splice(todoIndex, 1);
+      setTodos([...todos]);
+    });
   };
 
-  const moveTodos = () => {
-    setCompleteTodos([...todos, ...completeTodos]);
+  const moveTodos = async () => {
+    const result = await axios
+      .put("/moveTodos", { todos: todos })
+      .catch((e) => {
+        console.log(e);
+      });
+    await axios.delete("/allTodos").catch((e) => {
+      console.log(e);
+    });
+    setCompleteTodos([...result.data.rows]);
     setTodos([]);
   };
 
-  const removeTodo = (removeIndex) => {
-    const removeTodo = completeTodos[removeIndex];
-    completeTodos.splice(removeIndex, 1);
-    todos.push(removeTodo);
+  const backTodo = async (backTodoIndex) => {
+    const backTodo = completeTodos[backTodoIndex];
+    const result = await axios.put("/backCompleteTodo", {
+      todo: backTodo.todo,
+      iscompleted: backTodo.iscompleted,
+    });
+    await axios.delete("/completeTodo", {
+      data: { id: backTodo.id, todo: backTodo.todo },
+    });
+    completeTodos.splice(backTodoIndex, 1);
     setCompleteTodos([...completeTodos]);
-    setTodos([...todos]);
+    setTodos([...result.data.rows]);
+  };
+
+  const deleteCompleteTodos = () => {
+    axios.delete("/allCompleteTodos").then((res) => {
+      setCompleteTodos([]);
+    });
   };
 
   return (
@@ -105,9 +128,7 @@ function Main() {
           ようこそ <strong>{user}</strong> さん
         </p>
       </div>
-
       <Mainform submitTodo={submitTodo} />
-
       <MainTodos
         todos={todos}
         completeTodo={completeTodo}
@@ -115,10 +136,10 @@ function Main() {
         deleteTodo={deleteTodo}
         classes={classes}
       />
-
-      <MainIncompleteTodos
+      <MainCompleteTodos
         classes={classes}
-        removeTodo={removeTodo}
+        backTodo={backTodo}
+        deleteCompleteTodos={deleteCompleteTodos}
         completeTodos={completeTodos}
       />
     </div>

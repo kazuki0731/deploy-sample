@@ -7,12 +7,10 @@ const MainTodos = (props) => {
     <div className={classes.todosContainer}>
       <p>☆未完了☆</p>
       <ul>
-        {todos.map((data, index) => (
+        {todos.map((todo, index) => (
           <li key={index}>
-            <span
-              style={{ textDecoration: data.iscompleted && "line-through" }}
-            >
-              {data.todo}
+            <span className={todo.iscompleted ? classes.active : ""}>
+              {todo.todo}
             </span>
             <button onClick={() => completeTodo(index)}>完了</button>
             <button onClick={() => deleteTodo(index)}>削除</button>

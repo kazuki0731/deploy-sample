@@ -31,7 +31,9 @@ const Mainform = (props) => {
     <div>
       <form className={classes.root} onSubmit={handleSubmit(submitTodo)}>
         <TextSource label={"Todoを入力"} registText={"todo"} />
-        <ButtonSource classes={classes.btn} color={"default"} />
+        <ButtonSource classes={classes.btn} color={"default"}>
+          送信
+        </ButtonSource>
       </form>
     </div>
   );
