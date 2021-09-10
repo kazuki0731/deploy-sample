@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import MainForm from "./MainForm";
+import Mainform from "./Mainform";
 import MainTodos from "./MainTodos";
 import MainCompleteTodos from "./MainCompleteTodos";
 import { useContext } from "react";
@@ -129,7 +129,7 @@ function Main() {
           ようこそ <strong>{user}</strong> さん
         </p>
       </div>
-      <MainForm submitTodo={submitTodo} />
+      <Mainform submitTodo={submitTodo} />
       <MainTodos
         todos={todos}
         completeTodo={completeTodo}

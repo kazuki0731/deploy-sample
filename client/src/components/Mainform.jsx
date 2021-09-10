@@ -4,7 +4,6 @@ import ButtonSource from "./ButtonSource";
 import TextSource from "./TextSource";
 import { useContext } from "react";
 import { formContext } from "../context/ContextForm";
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MainForm = (props) => {
+const Mainform = (props) => {
   const { submitTodo } = props;
   const classes = useStyles();
   const { handleSubmit } = useContext(formContext);
@@ -39,4 +38,4 @@ const MainForm = (props) => {
   );
 };
 
-export default MainForm;
+export default Mainform;
