@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -38,7 +37,7 @@ const Login = ({ setIsLogin }) => {
         setIsLogin(true);
       }
     });
-  }, []);
+  }, [setIsLogin]);
 
   const handleOpen = () => {
     setOpen(true);

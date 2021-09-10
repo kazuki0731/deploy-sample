@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Mainform = (props) => {
+const MainForm = (props) => {
   const { submitTodo } = props;
   const classes = useStyles();
   const { handleSubmit } = useContext(formContext);
@@ -39,4 +39,4 @@ const Mainform = (props) => {
   );
 };
 
-export default Mainform;
+export default MainForm;

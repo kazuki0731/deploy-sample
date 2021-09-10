@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Mainform from "./Mainform";
+import MainForm from "./MainForm";
 import MainTodos from "./MainTodos";
 import MainCompleteTodos from "./MainCompleteTodos";
 import { useContext } from "react";
@@ -63,7 +63,7 @@ function Main() {
   }, []);
 
   const submitTodo = (data) => {
-    if(data.todo === "") return;
+    if (data.todo === "") return;
     axios.put("/todo", data).then((res) => {
       setTodos(res.data.rows);
     });
@@ -129,7 +129,7 @@ function Main() {
           ようこそ <strong>{user}</strong> さん
         </p>
       </div>
-      <Mainform submitTodo={submitTodo} />
+      <MainForm submitTodo={submitTodo} />
       <MainTodos
         todos={todos}
         completeTodo={completeTodo}
