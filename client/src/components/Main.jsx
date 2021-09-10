@@ -63,6 +63,7 @@ function Main() {
   }, []);
 
   const submitTodo = (data) => {
+    if(data.todo === "") return;
     axios.put("/todo", data).then((res) => {
       setTodos(res.data.rows);
     });
