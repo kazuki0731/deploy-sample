@@ -7,6 +7,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Fade from "@material-ui/core/Fade";
 import { formContext } from "../context/ContextForm";
 import { useContext } from "react";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -20,13 +21,24 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  error: {
+    color: "red",
+  },
 }));
 
-const Login = () => {
-  const [isLogin, setIsLogin] = useState(false);
+const Login = ({ setIsLogin }) => {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState("");
   const { register, handleSubmit } = useContext(formContext);
   const classes = useStyles();
+
+  useEffect(() => {
+    axios.get("/login").then((res) => {
+      if (res.data === "OK") {
+        setIsLogin(true);
+      }
+    });
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -38,8 +50,10 @@ const Login = () => {
 
   const login = (data) => {
     axios.post("/login", data).then((res) => {
-      if (res.data) {
+      if (res.data === "OK") {
         setIsLogin(true);
+      } else {
+        setError("※そんなユーザーはおらんだろ");
       }
     });
   };
@@ -67,13 +81,8 @@ const Login = () => {
               <input type="text" id="name" {...register("loginName")} />
               <br />
               <input type="submit" value="ログイン" />
+              <p className={classes.error}>{error}</p>
             </form>
-            {isLogin && (
-              <div>
-                <p>ログインできました</p>
-                <Link to="/main">メインページへ</Link>
-              </div>
-            )}
           </div>
         </Fade>
       </Modal>

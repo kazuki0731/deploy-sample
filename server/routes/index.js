@@ -7,14 +7,6 @@ router.get("/", function (req, res, next) {
   res.send("OK");
 });
 
-router.post("/login", (req, res) => {
-  const loginName = req.body.loginName;
-  if (loginName === "kawabata") {
-    req.session.user = loginName;
-    res.send("OK");
-  }
-});
-
 router.get("/allTodos", async (req, res) => {
   const results = await pool
     .query("SELECT * FROM todos")
@@ -103,10 +95,6 @@ router.delete("/allCompleteTodos", async (req, res) => {
     console.log(e);
   });
   res.send("OK");
-});
-
-router.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
 
 module.exports = router;
