@@ -51,8 +51,8 @@ function Main() {
   const { reset } = useContext(formContext);
 
   const getTodos = async () => {
-    const todos = await axios.get("/allTodos");
-    const completeTodos = await axios.get("/allCompleteTodos");
+    const todos = await axios.get("/todos/all");
+    const completeTodos = await axios.get("/todos/complete/all");
     setTodos(todos.data.rows);
     setCompleteTodos(completeTodos.data.rows);
     setUser(todos.data.user);
@@ -62,11 +62,10 @@ function Main() {
     getTodos();
   }, []);
 
-  const submitTodo = (data) => {
+  const submitTodo = async (data) => {
     if (data.todo === "") return;
-    axios.put("/todo", data).then((res) => {
-      setTodos(res.data.rows);
-    });
+    const res = await axios.put("/todo", data).catch((e) => console.log(e));
+    setTodos(res.data.rows);
     reset();
   };
 
@@ -80,21 +79,22 @@ function Main() {
     setTodos(newTodos);
   };
 
-  const deleteTodo = (todoIndex) => {
+  const deleteTodo = async (todoIndex) => {
     const deleteId = todos[todoIndex].id;
-    axios.delete("/todo", { data: { id: deleteId } }).then((res) => {
-      todos.splice(todoIndex, 1);
-      setTodos([...todos]);
-    });
+    await axios
+      .delete("/todo", { data: { id: deleteId } })
+      .catch((e) => console.log(e));
+    todos.splice(todoIndex, 1);
+    setTodos([...todos]);
   };
 
   const moveTodos = async () => {
     const result = await axios
-      .put("/moveTodos", { todos: todos })
+      .put("/todos/move", { todos: todos })
       .catch((e) => {
         console.log(e);
       });
-    await axios.delete("/allTodos").catch((e) => {
+    await axios.delete("/todos/all").catch((e) => {
       console.log(e);
     });
     setCompleteTodos([...result.data.rows]);
@@ -103,11 +103,11 @@ function Main() {
 
   const backTodo = async (backTodoIndex) => {
     const backTodo = completeTodos[backTodoIndex];
-    const result = await axios.put("/backCompleteTodo", {
+    const result = await axios.put("/todo/complete/back", {
       todo: backTodo.todo,
       iscompleted: backTodo.iscompleted,
     });
-    await axios.delete("/completeTodo", {
+    await axios.delete("/todo/complete", {
       data: { id: backTodo.id, todo: backTodo.todo },
     });
     completeTodos.splice(backTodoIndex, 1);
@@ -115,10 +115,9 @@ function Main() {
     setTodos([...result.data.rows]);
   };
 
-  const deleteCompleteTodos = () => {
-    axios.delete("/allCompleteTodos").then((res) => {
-      setCompleteTodos([]);
-    });
+  const deleteCompleteTodos = async () => {
+    await axios.delete("/todos/complete/all");
+    setCompleteTodos([]);
   };
 
   return (

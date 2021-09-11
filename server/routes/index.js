@@ -2,20 +2,26 @@ var express = require("express");
 var router = express.Router();
 const pool = require("../db/pool.js");
 
+const getCompleteTodos = "SELECT * FROM completeTodos";
+const getTodos = "SELECT * FROM todos";
+const deleteTodos = "DELETE FROM todos";
+const deleteCompleteTodos = "DELETE FROM completeTodos";
+const insert = (arg) => {
+  return `INSERT INTO ${arg}`;
+};
+
 router.get("/", function (req, res, next) {
   res.send("OK");
 });
 
-router.get("/allTodos", async (req, res) => {
-  const results = await pool
-    .query("SELECT * FROM todos")
-    .catch((e) => console.log(e));
+router.get("/todos/all", async (req, res) => {
+  const results = await pool.query(getTodos).catch((e) => console.log(e));
   res.json({ rows: results.rows, user: req.session.user });
 });
 
-router.get("/allCompleteTodos", async (req, res) => {
+router.get("/todos/complete/all", async (req, res) => {
   const results = await pool
-    .query("SELECT * FROM completeTodos")
+    .query(getCompleteTodos)
     .catch((e) => console.log(e));
   res.json({ rows: results.rows });
 });
@@ -23,74 +29,68 @@ router.get("/allCompleteTodos", async (req, res) => {
 router.put("/todo", async (req, res) => {
   const todo = req.body.todo;
   await pool
-    .query("INSERT INTO todos(todo) VALUES($1)", [todo])
+    .query(`${insert("todos")} (todo) VALUES($1)`, [todo])
     .catch((e) => console.log(e));
-  const results = await pool
-    .query("SELECT * FROM todos")
-    .catch((e) => console.log(e));
+  const results = await pool.query(getTodos).catch((e) => console.log(e));
   res.json({ rows: results.rows });
 });
 
 router.delete("/todo", async (req, res) => {
   const id = req.body.id;
   await pool
-    .query("DELETE FROM todos WHERE id = $1", [id])
+    .query(`${deleteTodos} WHERE id = $1`, [id])
     .catch((e) => console.log(e));
   res.send("OK");
 });
 
-router.put("/moveTodos", async (req, res) => {
+router.put("/todos/move", async (req, res) => {
   const todos = req.body.todos;
   console.log(todos);
   for (let i of todos) {
     await pool
-      .query("INSERT INTO completeTodos(todo, iscompleted) VAlUES($1, $2)", [
+      .query(`${insert("completeTodos")} (todo, iscompleted) VAlUES($1, $2)`, [
         i.todo,
         i.iscompleted,
       ])
       .catch((e) => console.log(e));
   }
   const results = await pool
-    .query("SELECT * FROM completeTodos")
+    .query(getCompleteTodos)
     .catch((e) => console.log(e));
   res.json({ rows: results.rows });
 });
 
-router.delete("/allTodos", async (req, res) => {
-  await pool.query("DELETE FROM todos").catch((e) => {
+router.delete("/todos/all", async (req, res) => {
+  await pool.query(deleteTodos).catch((e) => {
     console.log(e);
   });
   res.send("OK");
 });
 
-router.delete("/completeTodo", async (req, res) => {
-  const id = req.body.id;
-  const todo = req.body.todo;
-  console.log(id, todo);
-  await pool
-    .query("DELETE FROM completeTodos WHERE id = $1", [id])
-    .catch((e) => {
-      console.log(e);
-    });
-  res.send("OK");
-});
-
-router.put("/backCompleteTodo", async (req, res) => {
+router.put("/todo/complete/back", async (req, res) => {
   const todo = req.body.todo;
   const iscompleted = req.body.iscompleted;
-  await pool.query("INSERT INTO todos(todo, iscompleted) VALUES($1, $2)", [
+  await pool.query(`${insert("todos")} (todo, iscompleted) VALUES($1, $2)`, [
     todo,
     iscompleted,
   ]);
 
-  const results = await pool
-    .query("SELECT * FROM todos")
-    .catch((e) => console.log(e));
+  const results = await pool.query(getTodos).catch((e) => console.log(e));
   res.json({ rows: results.rows });
 });
 
-router.delete("/allCompleteTodos", async (req, res) => {
-  await pool.query("DELETE FROM completeTodos").catch((e) => {
+router.delete("/todo/complete", async (req, res) => {
+  const id = req.body.id;
+  const todo = req.body.todo;
+  console.log(id, todo);
+  await pool.query(`${deleteCompleteTodos} WHERE id = $1`, [id]).catch((e) => {
+    console.log(e);
+  });
+  res.send("OK");
+});
+
+router.delete("/todos/complete/all", async (req, res) => {
+  await pool.query(deleteCompleteTodos).catch((e) => {
     console.log(e);
   });
   res.send("OK");
