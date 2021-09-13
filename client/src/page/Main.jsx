@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import Mainform from "./Mainform";
-import MainTodos from "./MainTodos";
-import MainCompleteTodos from "./MainCompleteTodos";
+import Mainform from "../component/Form";
+import MainTodos from "../component/Todos";
+import MainCompleteTodos from "../component/CompleteTodos";
 import { useContext } from "react";
 import { formContext } from "../context/ContextForm";
 
