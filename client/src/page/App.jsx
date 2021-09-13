@@ -1,7 +1,7 @@
-import Login from "./page/Login";
-import FormContext from "./context/ContextForm";
+import Login from "./Login";
+import FormContext from "../context/ContextForm";
 import { useState } from "react";
-import Main from "./page/Main";
+import Main from "./Main";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
