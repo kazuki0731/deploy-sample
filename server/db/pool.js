@@ -1,7 +1,7 @@
 const { Pool } = require("pg");
 require("dotenv").config();
 
-// heroku
+
 const pool = new Pool({
   database: process.env.ENV_DB,
   user: process.env.ENV_USER,
